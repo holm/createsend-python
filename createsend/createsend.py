@@ -41,14 +41,14 @@ class CreateSendBase(object):
       'Accept-Encoding' : 'gzip, deflate' }
     parsed_base_uri = urlparse(CreateSend.base_uri)
     """username and password should only be set when it is intended that
-    the default basic authentication mechanism using the API key be 
+    the default basic authentication mechanism using the API key be
     overridden (e.g. when using the apikey route with username and password)."""
     if username and password:
       headers['Authorization'] = "Basic %s" % base64.b64encode("%s:%s" % (username, password))
     else:
-      headers['Authorization'] = "Basic %s" % base64.b64encode("%s:x" % CreateSend.api_key)
+      headers['Authorization'] = "Basic %s" % base64.b64encode("%s:x" % self.api_key)
 
-    """If in fake web mode (i.e. self.stub_request has been called), 
+    """If in fake web mode (i.e. self.stub_request has been called),
     self.faker should be set, and this request should be treated as a fake."""
     if self.fake_web:
       # Check that the actual url which would be requested matches self.faker.url. 
@@ -116,7 +116,7 @@ class CreateSend(CreateSendBase):
     """Gets your clients."""
     response = self._get('/clients.json')
     return json_to_py(response)
-    
+
   def countries(self):
     """Gets valid countries."""
     response = self._get('/countries.json')
@@ -136,14 +136,14 @@ class CreateSend(CreateSendBase):
   	"""gets administrators associated with the account"""
   	response = self._get('/admins.json')
   	return json_to_py(response)
-  
+
   def get_primary_contact(self):
   	"""retrieves the primary contact for this account"""
   	response = self._get('/primarycontact.json')
   	return json_to_py(response)
-  	
+
   def set_primary_contact(self, email):
 	"""assigns the primary contact for this account"""
 	params = { "email": email }
-	response = self._put('/primarycontact.json', params = params)
+	response = self._put('/primarycontact.json', params=params)
 	return json_to_py(response)
